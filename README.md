@@ -56,8 +56,17 @@ Se creó una estructura modular con clases específicas para cada tabla (`custom
 
 ## Cómo Ejecutar
 1. Clona el repositorio:
-   ```bash
-   git clone <REPO_URL>
-   cd etl_project
-   pip install -r requirements.txt
-   python main.py
+    ```bash
+    git clone <REPO_URL>
+   
+2. Entramos al proyecto
+    ```bash
+    cd etl_project
+   
+3. Instalamos las dependecias
+    ```bash
+    pip install -r requirements.txt
+   
+4. Ejectamos el main.py
+    ```bash
+    python main.py
