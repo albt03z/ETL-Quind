@@ -4,7 +4,7 @@ Este repositorio contiene la solución para la prueba técnica de un pipeline ET
 
 ## Estructura del Proyecto
 
-etl_project/
+ETL-Quind/
 ├── data/
 ├── src/
 │   ├── etl.py
@@ -61,7 +61,7 @@ Se creó una estructura modular con clases específicas para cada tabla (`custom
    
 2. Entramos al proyecto
     ```bash
-    cd etl_project
+    cd ETL-Quind
    
 3. Instalamos las dependecias
     ```bash
