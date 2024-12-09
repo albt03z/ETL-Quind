@@ -78,9 +78,27 @@ else:
 df_rental = df_rental.withColumn(
     "rental_duration_days",
     (col("return_date").cast("long") - col("rental_date").cast("long")) / (24 * 60 * 60)
+<<<<<<< HEAD
+=======
+).groupBy().agg({"rental_duration_days": "avg"}).withColumnRenamed("avg(rental_duration_days)", "average_rental_duration")
+
+# Convertir los DataFrames procesados a DynamicFrames para escritura en S3
+dyf_rental_store = DynamicFrame.fromDF(df_rental_store, glueContext, "dyf_rental_store")
+dyf_rental_genre = DynamicFrame.fromDF(df_rental_genre, glueContext, "dyf_rental_genre")
+dyf_rental_avg_duration = DynamicFrame.fromDF(df_rental_avg_duration, glueContext, "dyf_rental_avg_duration")
+
+# Escribir los resultados en S3 en formato Parquet
+glueContext.write_dynamic_frame.from_options(
+    frame=dyf_rental_store,
+    connection_type="s3",
+    connection_options={"path": "s3://etl-adaberto-gonzalez-quind/results/"},
+    format="parquet",
+    transformation_ctx="write_parquet_store"
+>>>>>>> e2f5851cf92abea518c4b5baf19b17dc43634678
 )
 df_avg_duration = df_rental.select(avg("rental_duration_days").alias("average_rental_duration"))
 
+<<<<<<< HEAD
 # 5. Películas más alquiladas
 if "title" in df_film.columns:
     df_most_rented_films = df_rental_film.groupBy("film_id", "title").agg(count("rental_id").alias("total_rentals_by_film")) \
@@ -117,6 +135,24 @@ write_to_s3(dyf_avg_duration, "s3://etl-adaberto-gonzalez-quind/results/avg_dura
 if df_most_rented_films is not None:
     dyf_most_rented_films = DynamicFrame.fromDF(df_most_rented_films, glueContext, "dyf_most_rented_films")
     write_to_s3(dyf_most_rented_films, "s3://etl-adaberto-gonzalez-quind/results/most_rented_films/", "write_most_rented_films")
+=======
+glueContext.write_dynamic_frame.from_options(
+    frame=dyf_rental_genre,
+    connection_type="s3",
+    connection_options={"path": "s3://etl-adaberto-gonzalez-quind/results/"},
+    format="parquet",
+    transformation_ctx="write_parquet_genre"
+)
+
+glueContext.write_dynamic_frame.from_options(
+    frame=dyf_rental_avg_duration,
+    connection_type="s3",
+    connection_options={"path": "s3://etl-adaberto-gonzalez-quind/results/"},
+    format="parquet",
+    transformation_ctx="write_parquet_avg_duration"
+)
+>>>>>>> e2f5851cf92abea518c4b5baf19b17dc43634678
 
 # Finalizar job
 job.commit()
+
