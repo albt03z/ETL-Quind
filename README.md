@@ -17,35 +17,42 @@ etl_project/
 ├── requirements.txt
 └── .gitignore
 
+
 ## Pasos del Proyecto
 
 ### 1. Extracción de Datos
 - Se proporcionó un archivo Excel llamado `Films2.xlsx` con cinco hojas: `customer`, `store`, `rental`, `inventory` y `film`.
 - Cada hoja representa una tabla en un modelo entidad-relación.
 
-### 2. Limpieza de Datos
-Se identificaron problemas en los datos:
-- IDs corruptas en el campo `store_id` de la tabla `inventory`.
-- Fechas en formatos incorrectos o inconsistentes.
-- Años de lanzamiento (`release_year`) en la tabla `film` con caracteres no válidos (`x2006`, `2006xxx`).
+### 2. Limpieza y Transformación
+Se identificaron problemas específicos en cada hoja de datos, los cuales fueron corregidos con las siguientes transformaciones:
 
-#### Soluciones Aplicadas
-- Eliminación de caracteres no válidos en las columnas afectadas usando expresiones regulares.
-- Manejo de valores nulos y duplicados.
-- Transformación de columnas con valores mal formateados.
+#### **customer**
+- Eliminación de caracteres no numéricos en los campos `customer_id`, `store_id`, `address_id` y `active`.
+- Normalización de correos electrónicos con expresiones regulares.
+- Conversión de nombres y correos electrónicos a mayúsculas.
+- Generación de un identificador alternativo en caso de valores faltantes o inválidos en `customer_id_old`.
 
-### 3. Generación de Archivos CSV
-- Los datos limpios fueron separados en archivos individuales y guardados en la carpeta `data/`.
+#### **store**
+- Eliminación de caracteres no numéricos en `store_id`, `manager_staff_id` y `address_id`.
 
-### 4. Subida de Datos a AWS
-- Los archivos CSV se subieron a un bucket de S3 para su procesamiento.
+#### **rental**
+- Limpieza de columnas clave: `rental_id`, `inventory_id`, `customer_id` y `staff_id` para eliminar caracteres no numéricos.
 
-### 5. Transformación con AWS Glue
-- Un script en AWS Glue realizará las transformaciones necesarias:
-  - Limpieza adicional.
-  - Joins entre tablas.
-  - Generación de nuevas métricas.
-  - Escritura de resultados en S3 en formato Parquet.
+#### **inventory**
+- Limpieza de `inventory_id`, `film_id` y `store_id` para eliminar caracteres no válidos, preservando la información relevante.
+
+#### **film**
+- Eliminación de caracteres no numéricos en columnas como `release_year`, `rental_duration`, `rental_rate` y `replacement_cost`.
+
+### 3. Automatización del ETL
+Se creó una estructura modular con clases específicas para cada tabla (`customer`, `store`, `rental`, `inventory`, `film`), ubicadas en la carpeta `src/`. Estas clases realizan las transformaciones y guardan los resultados en archivos CSV.
+
+#### **Archivo `functions.py`**
+- Centraliza las clases de ETL y coordina la ejecución del proceso.
+
+#### **Archivo `main.py`**
+- Ejecuta el proceso completo desde el archivo Excel hasta la generación de los archivos CSV limpios en la carpeta `data/`.
 
 ## Cómo Ejecutar
 1. Clona el repositorio:
@@ -53,3 +60,4 @@ Se identificaron problemas en los datos:
    git clone <REPO_URL>
    cd etl_project
    pip install -r requirements.txt
+   python main.py
