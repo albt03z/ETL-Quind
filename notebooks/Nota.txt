@@ -1,0 +1,3 @@
+El archivo aws_glue_script.py no es un ejecutable desde el local, 
+es el codigo utilizado en AWS una vez se realizo la configuracion inicial de la estructura en s3 con la data,
+configuracion de los roles y configuracion del la base de datos y crawler en el servicio de Glue
