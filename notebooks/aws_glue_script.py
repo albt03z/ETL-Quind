@@ -92,7 +92,7 @@ dyf_rental_avg_duration = DynamicFrame.fromDF(df_rental_avg_duration, glueContex
 glueContext.write_dynamic_frame.from_options(
     frame=dyf_rental_store,
     connection_type="s3",
-    connection_options={"path": "s3://etl-adaberto-gonzalez-quind/results/rental_store/"},
+    connection_options={"path": "s3://etl-adaberto-gonzalez-quind/results/"},
     format="parquet",
     transformation_ctx="write_parquet_store"
 )
@@ -100,7 +100,7 @@ glueContext.write_dynamic_frame.from_options(
 glueContext.write_dynamic_frame.from_options(
     frame=dyf_rental_genre,
     connection_type="s3",
-    connection_options={"path": "s3://etl-adaberto-gonzalez-quind/results/rental_genre/"},
+    connection_options={"path": "s3://etl-adaberto-gonzalez-quind/results/"},
     format="parquet",
     transformation_ctx="write_parquet_genre"
 )
@@ -108,10 +108,11 @@ glueContext.write_dynamic_frame.from_options(
 glueContext.write_dynamic_frame.from_options(
     frame=dyf_rental_avg_duration,
     connection_type="s3",
-    connection_options={"path": "s3://etl-adaberto-gonzalez-quind/results/rental_duration/"},
+    connection_options={"path": "s3://etl-adaberto-gonzalez-quind/results/"},
     format="parquet",
     transformation_ctx="write_parquet_avg_duration"
 )
 
 # Finalizar job
 job.commit()
+
